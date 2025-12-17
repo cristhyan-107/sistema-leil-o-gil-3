@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Callback processando...</title>
+</head>
+
+<body>
+    <p>Verificando autenticação...</p>
+    <script type="module">
+        import { supabase } from './supabaseClient.js'
+
+        // O Supabase lida automaticamente com a sessão na URL hash ao inicializar o client.
+        // Basta verificar se temos uma sessão e redirecionar.
+
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (session) {
+                window.location.href = '/dashboard.html'
+            } else {
+                // Se algo der errado ou não houver sessão, volta pro login
+                window.location.href = '/login.html'
+            }
+        })
+    </script>
+</body>
+
+</html>

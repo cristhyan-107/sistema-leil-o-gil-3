@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro - Supabase Demo</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        .btn-primary {
+            background-color: #24b47e;
+            color: white;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+            margin-bottom: 10px;
+        }
+
+        .success {
+            color: green;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+            margin-bottom: 10px;
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 style="text-align: center;">Criar Conta</h2>
+        <div id="errorMsg" class="error"></div>
+        <div id="successMsg" class="success"></div>
+
+        <form id="registerForm">
+            <input type="email" id="email" placeholder="Email" required />
+            <input type="password" id="password" placeholder="Senha" required />
+            <button type="submit" class="btn-primary">Cadastrar</button>
+        </form>
+
+        <div class="link">
+            Já tem conta? <a href="/login.html">Login</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { registerUser } from './auth.js'
+
+        const registerForm = document.getElementById('registerForm')
+        const errorMsg = document.getElementById('errorMsg')
+        const successMsg = document.getElementById('successMsg')
+
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault()
+            errorMsg.style.display = 'none'
+            successMsg.style.display = 'none'
+
+            const email = document.getElementById('email').value
+            const password = document.getElementById('password').value
+
+            const { data, error } = await registerUser(email, password)
+
+            if (error) {
+                errorMsg.textContent = error.message
+                errorMsg.style.display = 'block'
+            } else {
+                successMsg.textContent = 'Cadastro realizado! Verifique seu email se necessário.'
+                successMsg.style.display = 'block'
+                // Opcional: redirecionar após alguns segundos
+                setTimeout(() => {
+                    window.location.href = '/login.html'
+                }, 2000)
+            }
+        })
+    </script>
+</body>
+
+</html>
